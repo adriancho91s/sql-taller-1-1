@@ -1,0 +1,63 @@
+{
+  "name": "SQL Workshop - Hotel Management",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "mysql",
+  "workspaceFolder": "/workspace",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-mysql",
+        "cweijan.vscode-mysql-client2",
+        "Oracle.oracledevtools"
+      ],
+      "settings": {
+        "sqltools.connections": [
+          {
+            "name": "Hotel Management DB",
+            "driver": "MySQL",
+            "server": "localhost",
+            "port": 3306,
+            "database": "hotel_management",
+            "username": "hotel_admin",
+            "password": "hotel123"
+          },
+          {
+            "name": "Hotel Management DB (Root)",
+            "driver": "MySQL",
+            "server": "localhost",
+            "port": 3306,
+            "database": "hotel_management",
+            "username": "root",
+            "password": "rootpassword"
+          }
+        ]
+      }
+    }
+  },
+
+  "forwardPorts": [3306, 8080],
+  "portsAttributes": {
+    "3306": {
+      "label": "MySQL Database",
+      "onAutoForward": "notify"
+    },
+    "8080": {
+      "label": "Adminer Web UI",
+      "onAutoForward": "openBrowser"
+    }
+  },
+
+  "postCreateCommand": "echo 'Development container is ready! MySQL is running on port 3306, Adminer on port 8080'",
+
+  "remoteUser": "root",
+
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true
+    }
+  }
+}

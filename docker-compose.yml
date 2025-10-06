@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  mysql:
+    build: .
+    container_name: hotel_management_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: hotel_management
+      MYSQL_USER: hotel_admin
+      MYSQL_PASSWORD: hotel123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./solution.sql:/docker-entrypoint-initdb.d/solution.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hotel_network
+
+  adminer:
+    image: adminer:latest
+    container_name: hotel_adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+    depends_on:
+      - mysql
+    networks:
+      - hotel_network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  hotel_network:
+    driver: bridge
